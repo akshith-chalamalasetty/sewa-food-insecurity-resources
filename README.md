@@ -6,9 +6,9 @@ A food-resources hub for Los Angeles County and the wider SoCal region, focused 
 - **Backend:** FastAPI + SQLAlchemy + SQLite (a real SQL database — see "Database" below)
 - **Auth:** JWT (email + password, bcrypt hashed)
 - **AI:** Local Ollama (any open-source model) with graceful fallback to rule-based chat
-- **i18n:** 6 languages — English, Spanish, Chinese, Vietnamese, Korean, Tagalog
+- **i18n:** 15 languages — English, Spanish, Chinese, Vietnamese, Korean, Tagalog, Japanese, Hindi, French, Thai, Armenian, Russian, Khmer, Arabic, Farsi
 - **Maps:** Leaflet + OpenStreetMap (no API key), with browser geolocation
-- **Live data:** optional 211 LA County API integration
+- **Live data:** Real web resources from Southern California and Los Angeles County
 
 ## Features
 
@@ -19,13 +19,13 @@ A food-resources hub for Los Angeles County and the wider SoCal region, focused 
 - **Hero "Is this site for you?" section** on the home page that names the audience directly
 
 ### Original feature set (kept)
-- Email/password signup and login
+- Email/password signup and login with optional Google authentication
 - Food pantries searchable by ZIP, with no-eligibility / no-ID / immigration-safe filters
-- Food Waste Recovery — businesses post excess, volunteers/nonprofits claim pickups
-- Volunteer + SNAP coordinator directory (filter by ZIP and role)
+- Food Waste Recovery — businesses post excess, volunteers/nonprofits claim pickups, with 15+ Food Waste Recovery resources
+- Volunteer + SNAP coordinator directory + Volunteer sign-up form
 - Donor sign-up and listing
 - Budget meal planner ($15, $25, $60/week plans — including one for no-kitchen folks)
-- Donation page (Stripe/PayPal not wired — clearly marked as demo)
+- Donation page — Venmo link and QR code 
 - Youth programs (LAUSD Grab-and-Go, SFSP, CACFP)
 
 ### AI chatbot
@@ -73,7 +73,7 @@ If Ollama isn't running, the chatbot still works — it just uses the rule-based
 
 ## Live data (211 LA API)
 
-The seeded pantries are **demo data**. To pull real, current pantries from 211 LA County:
+The seeded pantries are real data from hundreds of Southern California and Los Angeles County resources. To pull even more pantries use 211 LA County API key:
 
 1. Apply for a partner API key at https://www.211la.org/partner-with-us — review takes ~1-2 weeks
 2. Once approved, set the key in your backend shell:
