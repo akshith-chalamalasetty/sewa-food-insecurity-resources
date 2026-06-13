@@ -131,7 +131,6 @@ The frontend (React) and backend (FastAPI) deploy to two free hosts. Code is alr
 **Push to GitHub** (from the project root, the folder containing both `backend/` and `frontend/`):
 
 ```powershell
-git init
 git add .
 git commit -m "Sewa Food Resources"
 git branch -M main
@@ -153,7 +152,7 @@ git push -u origin main
 
 **Finally:** add your Netlify URL to the Google OAuth client's "Authorized JavaScript origins" so Google sign-in works on the live site.
 
-> Free-tier notes: Render's free web service sleeps after ~15 min idle (first request wakes it in ~30-60s), and free PostgreSQL expires after 90 days. Fine for demos; upgrade for a long-term launch.
+> Free-tier notes: Render's free web service sleeps after ~15 min idle (first request wakes it in ~30-60s), and free PostgreSQL expires after 90 days. Fine for demos; upgrade or move to Neon/Supabase (free, non-expiring) for a long-term launch.
 
 ## Project structure
 
