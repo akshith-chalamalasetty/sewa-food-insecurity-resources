@@ -3,39 +3,41 @@
 A food-resources hub for Los Angeles County and the wider SoCal region, focused on people **ineligible for SNAP/CalFresh** — undocumented residents, mixed-status families, recent immigrants, students, seniors, and people just over the income line.
 
 - **Frontend:** React + Vite + React Router
-- **Backend:** FastAPI + SQLAlchemy + SQLite (a real SQL database — see "Database" below)
-- **Auth:** JWT (email + password, bcrypt hashed)
-- **AI:** Local Ollama (any open-source model) with graceful fallback to rule-based chat
-- **i18n:** 6 languages — English, Spanish, Chinese, Vietnamese, Korean, Tagalog
+- **Backend:** FastAPI + SQLAlchemy
+- **Database:** SQLite locally, PostgreSQL in production (chosen automatically — see "Database" below)
+- **Auth:** JWT (email + password, bcrypt hashed) with optional Google sign-in
+- **AI:** Google Gemini (gemini-2.5-flash) with graceful fallback to rule-based chat
+- **i18n:** 15 languages — English, Spanish, Chinese, Vietnamese, Korean, Tagalog, Japanese, Hindi, French, Thai, Armenian, Russian, Khmer, Arabic, Farsi (Arabic & Farsi render right-to-left)
 - **Maps:** Leaflet + OpenStreetMap (no API key), with browser geolocation
-- **Live data:** optional 211 LA County API integration
+- **Live data:** Real curated resources from Southern California and Los Angeles County
 
 ## Features
 
 ### Tailored to SNAP-ineligible communities
-- **Get Help wizard** — pick your situation (undocumented, mixed-status, student, senior, recent immigrant, denied SNAP, no kitchen, no address) and get a ranked list of matched resources
-- **Resources library** — 25+ curated SoCal entries across 10 categories: community fridges, mutual aid, WIC, school meals, senior programs, student programs, immigrant orgs, legal aid, know-your-rights, hotlines
+- **Get Help wizard** — pick your situation (undocumented, mixed-status, student, senior, recent immigrant, denied SNAP, no kitchen, no address) and get a ranked list of matched resources, saved to your account
+- **Resources library** — 35 curated SoCal entries across 10 categories with multi-select filtering: community fridges, mutual aid, WIC, school meals, senior programs, student programs, immigrant orgs, legal aid, know-your-rights, hotlines
 - **Trust badges** on every card — "No ID needed", "Immigration-safe", language coverage
-- **Hero "Is this site for you?" section** on the home page that names the audience directly
+- **"You are safe here" header** on every page + a home-page "Is this site for you?" section that names the audience directly
 
-### Original feature set (kept)
-- Email/password signup and login
-- Food pantries searchable by ZIP, with no-eligibility / no-ID / immigration-safe filters
-- Food Waste Recovery — businesses post excess, volunteers/nonprofits claim pickups
-- Volunteer + SNAP coordinator directory (filter by ZIP and role)
-- Donor sign-up and listing
-- Budget meal planner ($15, $25, $60/week plans — including one for no-kitchen folks)
-- Donation page (Stripe/PayPal not wired — clearly marked as demo)
-- Youth programs (LAUSD Grab-and-Go, SFSP, CACFP)
+### Core feature set
+- Email/password signup and login, plus optional Google authentication
+- Food pantries on a Leaflet map (26 real LA/SoCal locations) with no-eligibility / no-ID / immigration-safe filters and "use my location"
+- Food Recovery — businesses post excess food, volunteers/nonprofits claim pickups; plus 11 real food-recovery programs (donation apps, free sharing, rescued-food stores) with multi-select filters
+- Volunteer directory + self-service volunteer sign-up form (searchable by ZIP and language)
+- Donor sign-up with a "claim this donation" flow and a recommended/not-accepted donation guide
+- Budget meal planner — 50+ plans from $10–$100, filterable by diet (vegetarian, vegan, halal, gluten-free, diabetic-friendly) and budget
+- Donation page — Venmo deep links (preset + custom amounts) and a QR code
+- Youth programs (17 real programs) with multi-select age filters
 
 ### AI chatbot
-- Calls local **Ollama** if running, falls back to rule-based replies otherwise
-- Status indicator in the UI shows which mode it's in
-- System prompt is tuned for warm, plain-language help for SNAP-ineligible users (see `backend/ollama_client.py`)
+- Calls **Google Gemini** when a key is configured, falls back to rule-based replies otherwise
+- Status indicator in the UI shows which mode it's in (🟢 AI online / 🟡 Fallback)
+- System prompt is tuned for warm, plain-language help for SNAP-ineligible users (see `backend/gemini_client.py`)
 
 ## Running locally
 
 ### 1. Backend
+
 ```powershell
 cd "sewa food insecurity project\backend"
 python -m venv .venv
@@ -43,37 +45,72 @@ python -m venv .venv
 pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 ```
+
 SQLite DB auto-creates and seeds on first run. API docs: http://127.0.0.1:8000/docs
 
 ### 2. Frontend
+
 ```powershell
 cd "sewa food insecurity project\frontend"
 npm install
 npm run dev
 ```
+
 Open http://127.0.0.1:5173
 
-## Setting up the AI chatbot (Ollama)
+## Configuration (environment variables)
 
-1. Install Ollama from https://ollama.com (the Windows installer runs it as a background service).
-2. Open PowerShell and pull a model. Recommended for hackathon/laptop:
-   ```powershell
-   ollama pull llama3.2
+Nothing secret lives in the code — it's all read from environment variables, with safe local fallbacks. Locally these go in **`backend/.env`** (gitignored, never pushed). In production they go in your host's dashboard.
+
+| Variable | Used for | Local default if unset |
+|---|---|---|
+| `GEMINI_API_KEY` | AI chatbot (Google Gemini) | none → chatbot uses rule-based fallback |
+| `GEMINI_MODEL` | which Gemini model | `gemini-2.5-flash` |
+| `DATABASE_URL` | database connection | SQLite file `food_resources.db` |
+| `JWT_SECRET` | signs login tokens | a placeholder (override in production) |
+| `FRONTEND_ORIGIN` | CORS allow-list for the deployed frontend | localhost only |
+| `GOOGLE_CLIENT_ID` | (optional) verifies Google sign-in tokens | not enforced |
+
+The frontend reads two build-time variables (in **`frontend/.env`**, also gitignored):
+
+| Variable | Used for |
+|---|---|
+| `VITE_API_URL` | backend URL (defaults to `http://127.0.0.1:8000` locally) |
+| `VITE_GOOGLE_CLIENT_ID` | Google sign-in button |
+
+## Setting up the AI chatbot (Google Gemini)
+
+1. Get a free API key at https://aistudio.google.com/apikey
+2. Put it in `backend/.env`:
    ```
-   Other good options: `mistral`, `gemma2:2b` (small/fast), `qwen2.5:7b` (high quality).
-3. Restart the backend. The chatbot's status badge will switch from 🟡 "Fallback mode" to 🟢 "AI online".
+   GEMINI_API_KEY=your-key-here
+   GEMINI_MODEL=gemini-2.5-flash
+   ```
+3. Restart the backend. The chatbot's status badge switches from 🟡 "Fallback mode" to 🟢 "AI online".
 
-To change the model, set an env var before running uvicorn:
-```powershell
-$env:OLLAMA_MODEL = "mistral"
-uvicorn main:app --reload --port 8000
+If no key is set (or a request fails), the chatbot still works — it just uses the rule-based responses.
+
+> Note: different Google accounts have free quota on different models. If you get a `429 / RESOURCE_EXHAUSTED` error with `limit: 0`, that model has no free quota on your account — try `gemini-2.5-flash` or `gemini-flash-latest` instead.
+
+## Database
+
+Your code automatically picks the database from the `DATABASE_URL` environment variable — **you never edit `database.py` to switch.**
+
+- **Locally:** `DATABASE_URL` is unset, so it falls back to SQLite (`backend/food_resources.db`). Zero setup.
+- **In production:** set `DATABASE_URL` to a PostgreSQL connection string and the same code uses Postgres instead.
+
+```python
+# backend/database.py — the relevant line (no editing needed):
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./food_resources.db")
 ```
 
-If Ollama isn't running, the chatbot still works — it just uses the rule-based responses.
+**Why this matters for deployment:** hosts like Render have an *ephemeral filesystem* — the SQLite file gets wiped on every restart/redeploy, erasing user accounts and signups. PostgreSQL runs on its own server, so data persists. User accounts, donors, volunteers, food listings, and intake answers all live in whichever database is configured; passwords are bcrypt-hashed and auth uses JWT tokens.
 
-## Live data (211 LA API)
+`psycopg2-binary` (the Postgres driver) is already in `requirements.txt`, so no extra install is needed.
 
-The seeded pantries are **demo data**. To pull real, current pantries from 211 LA County:
+## Live data (211 LA API — optional)
+
+The seeded pantries and resources are real LA/SoCal organizations. To pull even more pantries from 211 LA County:
 
 1. Apply for a partner API key at https://www.211la.org/partner-with-us — review takes ~1-2 weeks
 2. Once approved, set the key in your backend shell:
@@ -85,21 +122,38 @@ The seeded pantries are **demo data**. To pull real, current pantries from 211 L
    python refresh_data.py 211
    ```
 
-The integration code is in `backend/integrations/two_one_one_la.py`. You'll likely need to adjust the field mapping in there based on which API tier your key gives you — comments explain what to change.
+The integration code is in `backend/integrations/two_one_one_la.py`. You'll likely need to adjust the field mapping based on which API tier your key gives you — comments explain what to change. To run on a schedule, wrap it in a Windows Task Scheduler job or cron task that calls `python refresh_data.py 211` daily.
 
-To run this on a schedule, wrap it in a Windows Task Scheduler job or a cron task that calls `python refresh_data.py 211` once a day.
+## Deployment (Netlify + Render)
 
-## Database
+The frontend (React) and backend (FastAPI) deploy to two free hosts. Code is already configured to read all settings from environment variables.
 
-The current setup uses **SQLite via SQLAlchemy** — that *is* a real SQL database. User accounts, donations, pantries, resources, food listings, intake answers all persist to `backend/food_resources.db`. Passwords are bcrypt-hashed; auth uses JWT tokens.
+**Push to GitHub** (from the project root, the folder containing both `backend/` and `frontend/`):
 
-For deployment you can switch to PostgreSQL or Supabase by changing one line in `backend/database.py`:
-```python
-SQLALCHEMY_DATABASE_URL = "postgresql://user:pass@host:5432/dbname"
-# or Supabase:
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres.xxxxx:password@aws-region.pooler.supabase.com:6543/postgres"
+```powershell
+git init
+git add .
+git commit -m "Sewa Food Resources"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/sewa-food-resources.git
+git push -u origin main
 ```
-Then `pip install psycopg2-binary` and restart. No other code changes needed — SQLAlchemy handles the rest.
+
+**Backend on Render:** New Web Service → root directory `backend`, build `pip install -r requirements.txt`, start `uvicorn main:app --host 0.0.0.0 --port $PORT`. Then create a free **PostgreSQL** database and set these environment variables on the web service:
+
+| Key | Value |
+|---|---|
+| `DATABASE_URL` | the database's **Internal Database URL** |
+| `JWT_SECRET` | any long random string |
+| `GEMINI_API_KEY` | your Gemini key |
+| `GEMINI_MODEL` | `gemini-2.5-flash` |
+| `FRONTEND_ORIGIN` | your Netlify URL (e.g. `https://sewa-food.netlify.app`) |
+
+**Frontend on Netlify:** Import the repo → base directory `frontend`, build `npm run build`, publish `frontend/dist`. Set `VITE_API_URL` (your Render backend URL) and `VITE_GOOGLE_CLIENT_ID`. A `frontend/public/_redirects` file is included so client-side routes don't 404 on refresh.
+
+**Finally:** add your Netlify URL to the Google OAuth client's "Authorized JavaScript origins" so Google sign-in works on the live site.
+
+> Free-tier notes: Render's free web service sleeps after ~15 min idle (first request wakes it in ~30-60s), and free PostgreSQL expires after 90 days. Fine for demos; upgrade for a long-term launch.
 
 ## Project structure
 
@@ -109,41 +163,48 @@ sewa food insecurity project/
 │   ├── main.py              # All API routes
 │   ├── models.py            # SQLAlchemy models
 │   ├── schemas.py           # Pydantic
-│   ├── database.py          # SQLAlchemy setup
-│   ├── auth.py              # JWT + bcrypt
-│   ├── ollama_client.py     # Ollama HTTP client
-│   ├── seed.py              # Sample data
+│   ├── database.py          # SQLite/Postgres via DATABASE_URL
+│   ├── auth.py              # JWT + bcrypt + Google verify
+│   ├── gemini_client.py     # Google Gemini chat client
+│   ├── seed.py              # Curated real-data seeding
+│   ├── refresh_data.py      # Optional 211 LA importer
+│   ├── integrations/        # 211 LA API client
 │   └── requirements.txt
 ├── frontend/
 │   ├── package.json
 │   ├── index.html
+│   ├── public/_redirects    # Netlify SPA routing
 │   └── src/
 │       ├── App.jsx
-│       ├── api.js
+│       ├── api.js           # reads VITE_API_URL
 │       ├── styles.css
-│       ├── context/         # AuthContext, LangContext
-│       ├── components/      # NavBar, ResourceCard
+│       ├── resourceI18n.js  # resource-description translations
+│       ├── context/         # AuthContext, LangContext (15 languages)
+│       ├── components/       # NavBar, ResourceCard, PantryMap, GoogleSignIn, DemoBanner
 │       └── pages/
 │           ├── Home.jsx
-│           ├── GetHelp.jsx       ← intake wizard (NEW)
-│           ├── Resources.jsx     ← categorized library (NEW)
+│           ├── GetHelp.jsx
+│           ├── Resources.jsx
 │           ├── Pantries.jsx
-│           ├── Chatbot.jsx       ← now Ollama-aware
+│           ├── Chatbot.jsx
 │           ├── Login.jsx / Register.jsx
 │           ├── FoodRecovery.jsx
 │           ├── Volunteers.jsx
 │           ├── Donors.jsx / Donate.jsx
 │           ├── MealPlanner.jsx
-│           └── Youth.jsx
+│           ├── Youth.jsx
+│           └── Contact.jsx
 ├── run-backend.bat
 ├── run-frontend.bat
 └── README.md
 ```
 
-## After this change
+## Resetting the local database
 
-If you already have `backend/food_resources.db` from the previous version, **delete it** so the new tables (Resource, plus new columns on Pantry and User) get created from scratch with the expanded seed data:
+If the schema changes and your local SQLite file is out of date, delete it so fresh tables are created and re-seeded on the next backend start:
+
 ```powershell
 Remove-Item "sewa food insecurity project\backend\food_resources.db"
 ```
-Then restart the backend.
+
+(Static catalogs — meal plans, pantries, resources — re-seed automatically. User data is not seeded.)

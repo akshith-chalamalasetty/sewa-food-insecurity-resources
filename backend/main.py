@@ -1,3 +1,7 @@
+# Load backend/.env BEFORE anything reads environment variables.
+from dotenv import load_dotenv
+load_dotenv()
+
 import os
 import secrets
 from typing import List, Optional
@@ -8,7 +12,7 @@ from sqlalchemy.orm import Session
 
 from database import Base, engine, get_db
 import models, schemas, auth, seed
-import ollama_client
+import gemini_client
 
 Base.metadata.create_all(bind=engine)
 
@@ -402,20 +406,16 @@ def _rule_based(payload: schemas.ChatMessage) -> schemas.ChatReply:
 
 @app.post("/chat", response_model=schemas.ChatReply)
 async def chat(payload: schemas.ChatMessage):
-    """Try Ollama first; fall back to rule-based if Ollama is unavailable."""
-    try:
-        reply = await ollama_client.chat(payload.message, payload.history, payload.language)
-        return schemas.ChatReply(reply=reply, suggestions=[], source="ollama")
-    except Exception:
-        return _rule_based(payload)
+    """Try Gemini first; fall back to rule-based if no key or any error."""
+    if gemini_client.is_configured():
+        try:
+            reply = await gemini_client.chat(payload.message, payload.history, payload.language)
+            return schemas.ChatReply(reply=reply, suggestions=[], source="gemini")
+        except Exception:
+            pass
+    return _rule_based(payload)
 
 
 @app.get("/chat/status")
 async def chat_status():
-    import httpx
-    try:
-        async with httpx.AsyncClient(timeout=2.0) as c:
-            r = await c.get(f"{ollama_client.OLLAMA_URL}/api/tags")
-            return {"ollama_online": r.status_code == 200, "model": ollama_client.OLLAMA_MODEL}
-    except Exception:
-        return {"ollama_online": False, "model": ollama_client.OLLAMA_MODEL}
+    return {"ai_online": gemini_client.is_configured(), "model": gemini_client.GEMINI_MODEL}

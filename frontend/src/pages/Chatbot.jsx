@@ -14,7 +14,7 @@ export default function Chatbot() {
   const endRef = useRef(null);
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
-  useEffect(() => { api.chatStatus().then(setStatus).catch(() => setStatus({ ollama_online: false })); }, []);
+  useEffect(() => { api.chatStatus().then(setStatus).catch(() => setStatus({ ai_online: false })); }, []);
 
   const send = async (text) => {
     const message = (text ?? input).trim();
@@ -40,10 +40,10 @@ export default function Chatbot() {
       <div className="chat-header">
         <h2>{t("chatbot")}</h2>
         {status && (
-          <span className={`status-dot ${status.ollama_online ? "online" : "offline"}`}>
-            {status.ollama_online
+          <span className={`status-dot ${status.ai_online ? "online" : "offline"}`}>
+            {status.ai_online
               ? `🟢 AI online (${status.model})`
-              : "🟡 Fallback mode (Ollama not detected)"}
+              : "🟡 Fallback mode (no AI key configured)"}
           </span>
         )}
       </div>
@@ -52,7 +52,7 @@ export default function Chatbot() {
         {messages.map((m, i) => (
           <div key={i} className={`bubble ${m.role === "user" ? "user" : "bot"}`}>
             {m.content}
-            {m.source === "ollama" && <span className="bubble-tag">AI</span>}
+            {m.source === "gemini" && <span className="bubble-tag">AI</span>}
           </div>
         ))}
         {busy && <div className="bubble bot typing">…</div>}
