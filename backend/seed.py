@@ -39,7 +39,7 @@ SAMPLE_PANTRIES = [
        "(213) 347-6300", "Daily meals",
        "Three meals daily on Skid Row, open to anyone. No questions asked.",
        34.0443, -118.2451),
-    _p("The Midnight Mission", "601 S San Pedro St", "Los Angeles", "90013",
+    _p("The Midnight Mission", "601 S San Pedro St", "Los Angeles", "90014",
        "(213) 624-9258", "Daily 6:30am, 12pm, 4:30pm",
        "Public meals served three times daily, every day of the year.",
        34.0437, -118.2446),
@@ -62,7 +62,7 @@ SAMPLE_PANTRIES = [
        "Free medically tailored meals delivered to people with serious illness.",
        34.0877, -118.3266),
     _p("SOVA West (JFS LA)", "8846 W Pico Blvd", "Los Angeles", "90035",
-       "(310) 838-7559", "Call for hours",
+       "(818) 988-7682", "Call for hours",
        "Free groceries for anyone in need. Part of Jewish Family Service LA.",
        34.0553, -118.3925, "en,es,he,ru"),
     _p("Westside Food Bank", "1710 22nd St", "Santa Monica", "90404",
@@ -103,24 +103,24 @@ SAMPLE_PANTRIES = [
        "(562) 435-3577", "Mon-Fri 8am-4pm",
        "Long Beach's food bank — call for partner pantry locations.",
        33.7842, -118.2031),
-    _p("Long Beach Rescue Mission", "1335 Pacific Ave", "Long Beach", "90813",
-       "(562) 591-1292", "Daily meals",
-       "Public meals daily. Everyone welcome.",
-       33.7796, -118.1929, "en,es,km"),
+    _p("Long Beach Rescue Mission", "1430 Pacific Ave", "Long Beach", "90813",
+       "(562) 591-1292", "Public lunch ~12-1pm (not Fri)",
+       "Hundreds of meals served daily. Public lunch open to everyone.",
+       33.7821, -118.1929, "en,es,km"),
 
     # ---- Pasadena / San Gabriel Valley ----
     _p("Friends In Deed", "444 E Washington Blvd", "Pasadena", "91104",
        "(626) 797-2402", "Pantry: Tue-Thu",
        "Choice-style food pantry — shop for what you actually need.",
        34.1672, -118.1357),
-    _p("Foothill Unity Center", "415 W Chestnut Ave", "Monrovia", "91016",
+    _p("Foothill Unity Center", "790 W Chestnut Ave", "Monrovia", "91016",
        "(626) 358-3486", "Mon-Fri, call first",
        "Food and crisis help for the San Gabriel Valley foothills.",
        34.1471, -118.0065),
-    _p("Salvation Army Pasadena Hope Center", "960 E Walnut St", "Pasadena", "91106",
-       "(626) 773-4400", "Call for pantry hours",
-       "Food pantry and meals in central Pasadena.",
-       34.1497, -118.1283),
+    _p("Salvation Army Pasadena Hope Center", "1000 E Walnut St", "Pasadena", "91106",
+       "(626) 529-0503", "Mon/Wed/Fri 9-11:30am",
+       "Hope Pantry — choose your own groceries and hygiene products, free.",
+       34.1497, -118.1278),
 
     # ---- Orange County ----
     _p("Second Harvest Food Bank of OC", "8014 Marine Way", "Irvine", "92618",
@@ -138,7 +138,7 @@ SAMPLE_PANTRIES = [
 
     # ---- Inland Empire / Ventura ----
     _p("Feeding America Riverside | San Bernardino", "2950-B Jefferson St", "Riverside", "92504",
-       "(951) 359-4757", "Mon-Fri 8am-4:30pm",
+       "(951) 359-4757", "Mon-Fri 7am-3:30pm",
        "Inland Empire's food bank — call for partner pantry locations.",
        33.9218, -117.4173),
     _p("FOOD Share of Ventura County", "4156 Southbank Rd", "Oxnard", "93036",
@@ -156,19 +156,19 @@ SAMPLE_RESOURCES = [
          languages="en,es", no_id_required=True, immigration_safe=True),
     dict(name="Long Beach Fridge Network", category="community_fridge",
          description="Multiple fridge locations across Long Beach. Map online.",
-         zip_code="90813", url="https://longbeachfridge.org/",
+         zip_code="90813", url="https://www.lacommunityfridges.com/",
          tags="undocumented,no_address",
          languages="en,es,km", no_id_required=True, immigration_safe=True),
 
     # ----- Mutual aid (community-run, no bureaucracy) -----
     dict(name="Ground Game LA", category="mutual_aid",
          description="Weekly food distribution + supplies. Run by neighbors for neighbors.",
-         zip_code="90026", url="https://groundgame.la/",
+         zip_code="90026", url="https://mutualaidla.org/",
          tags="undocumented,recent_immigrant,denied_snap,mixed_status",
          languages="en,es", no_id_required=True, immigration_safe=True),
     dict(name="Polo's Pantry", category="mutual_aid",
          description="Mutual-aid pantry serving Pico-Union and surrounding immigrant neighborhoods.",
-         zip_code="90006",
+         zip_code="90006", url="https://www.polospantry.org/",
          tags="undocumented,recent_immigrant,mixed_status",
          languages="en,es", no_id_required=True, immigration_safe=True),
     dict(name="SELAH Neighborhood Homeless Coalition", category="mutual_aid",
@@ -194,19 +194,19 @@ SAMPLE_RESOURCES = [
     # ----- School meals (citizenship irrelevant) -----
     dict(name="LAUSD Grab-and-Go Meals", category="school_meal",
          description="Free breakfast + lunch for any student 18 and under at LAUSD sites. No enrollment proof needed in summer.",
-         url="https://achieve.lausd.net/foodservices",
+         url="https://food.lausd.org/",
          tags="children,mixed_status,undocumented,recent_immigrant",
          languages="en,es", no_id_required=True, immigration_safe=True),
     dict(name="Summer Food Service Program (SFSP)", category="school_meal",
          description="Free summer meals for kids 18 and under at parks, libraries, community centers. No application.",
-         url="https://www.cde.ca.gov/ls/nu/sn/sfsp.asp",
+         url="https://www.cde.ca.gov/ls/nu/sf/",
          tags="children,no_address",
          languages="en,es", no_id_required=True, immigration_safe=True),
 
     # ----- Senior programs -----
     dict(name="St. Vincent Meals on Wheels", category="senior",
          description="Free or low-cost hot meals delivered to homebound seniors. No income limit at intake.",
-         phone="(213) 387-9755", url="https://www.stvincentmow.org/",
+         phone="(213) 484-7775", url="https://www.svmow.org/",
          tags="senior,no_kitchen",
          languages="en,es", no_id_required=True, immigration_safe=True),
     dict(name="CSFP — Senior Food Box (LA Food Bank)", category="senior",
@@ -223,12 +223,12 @@ SAMPLE_RESOURCES = [
          languages="en,es", no_id_required=True, immigration_safe=True),
     dict(name="UCLA Community Programs Office Food Closet", category="student",
          description="Free groceries for UCLA students. No proof of need required.",
-         address="105 Kerckhoff Hall", zip_code="90095", url="https://cpo.ucla.edu/foodcloset",
+         address="220 Westwood Plaza (Student Activities Center)", zip_code="90095", url="https://cpo.ucla.edu/",
          tags="student", languages="en,es",
          no_id_required=False, immigration_safe=True),
     dict(name="CSULB Beach Pantry", category="student",
          description="On-campus food pantry for CSULB students. Anonymous and free.",
-         zip_code="90840",
+         zip_code="90840", url="https://www.csulb.edu/student-affairs/basic-needs/food",
          tags="student", languages="en,es",
          no_id_required=False, immigration_safe=True),
 
@@ -487,13 +487,14 @@ def build_meal_plans():
 def run():
     db = SessionLocal()
     try:
-        # Guarded tables: users interact with these, so only seed when empty.
+        # Pantries: guarded (only seed when empty).
         if db.query(models.Pantry).count() == 0:
             db.add_all([models.Pantry(**p) for p in SAMPLE_PANTRIES])
-        if db.query(models.Resource).count() == 0:
-            db.add_all([models.Resource(**r) for r in SAMPLE_RESOURCES])
         # Food listings + volunteers: real self-sign-ups only — nothing seeded.
-        # Meal plans: static catalog, always refresh.
+        # Resources + meal plans: pure curated catalogs (no user data),
+        # always refresh so edits (e.g. link fixes) take effect on every deploy.
+        db.query(models.Resource).delete()
+        db.add_all([models.Resource(**r) for r in SAMPLE_RESOURCES])
         db.query(models.MealPlan).delete()
         db.add_all([models.MealPlan(**m) for m in build_meal_plans()])
         db.commit()

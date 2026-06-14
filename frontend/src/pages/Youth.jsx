@@ -10,7 +10,7 @@ const PROGRAMS = [
   {
     name: "Head Start & Early Head Start",
     age: "under5", icon: "🧸",
-    link: "https://www.lacoe.edu/services/head-start-early-learning",
+    link: "https://prekkid.org/",
     desc: {
       en: "Free preschool with free meals for kids 0-5 from low-income families. Immigration status is never asked. Also supports pregnant parents.",
       es: "Preescolar gratis con comidas gratis para niños de 0 a 5 de familias de bajos ingresos. Nunca preguntan estatus migratorio. También apoya a padres embarazados.",
@@ -49,7 +49,7 @@ const PROGRAMS = [
   {
     name: "Free School Breakfast & Lunch (LAUSD)",
     age: "k12", icon: "🏫",
-    link: "https://achieve.lausd.net/foodservices",
+    link: "https://food.lausd.org/",
     desc: {
       en: "Every LAUSD student eats breakfast AND lunch free — no application, no questions. California serves free school meals to ALL students regardless of income or status.",
       es: "Todo estudiante de LAUSD desayuna Y almuerza gratis — sin solicitud, sin preguntas. California da comidas escolares gratis a TODOS los estudiantes sin importar ingresos o estatus.",
@@ -75,7 +75,7 @@ const PROGRAMS = [
   {
     name: "Summer Food Service Program (SFSP)",
     age: "k12", icon: "🌳",
-    link: "https://www.cde.ca.gov/ls/nu/sn/sfsp.asp",
+    link: "https://www.cde.ca.gov/ls/nu/sf/",
     desc: {
       en: "Free meals at parks, libraries, and community centers all summer. Kids 18 and under just show up — no sign-up, no ID.",
       es: "Comidas gratis en parques, bibliotecas y centros comunitarios todo el verano. Niños de 18 o menos solo llegan — sin registro, sin identificación.",
@@ -88,7 +88,7 @@ const PROGRAMS = [
   {
     name: "After-School Snack & Supper (CACFP)",
     age: "k12", icon: "🥪",
-    link: "https://www.cde.ca.gov/ls/nu/cc/",
+    link: "https://www.cde.ca.gov/ls/nu/as/index.asp",
     desc: {
       en: "Free snacks and supper at after-school programs, Boys & Girls Clubs, and rec centers.",
       es: "Meriendas y cena gratis en programas después de clases, Boys & Girls Clubs y centros recreativos.",
@@ -179,7 +179,7 @@ const PROGRAMS = [
   {
     name: "Campus Food Pantries (UCLA, CSULB, community colleges)",
     age: "college", icon: "🛒",
-    link: "https://cpo.ucla.edu/foodcloset",
+    link: "https://cpo.ucla.edu/",
     desc: {
       en: "Almost every SoCal campus now runs a free student pantry — UCLA Food Closet, CSULB Beach Pantry, and most community colleges. Anonymous, no proof of need.",
       es: "Casi todo campus del Sur de California tiene una despensa estudiantil gratis — UCLA, CSULB y la mayoría de colegios comunitarios. Anónimo, sin prueba de necesidad.",

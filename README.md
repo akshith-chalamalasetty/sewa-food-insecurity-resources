@@ -21,13 +21,15 @@ A food-resources hub for Los Angeles County and the wider SoCal region, focused 
 
 ### Core feature set
 - Email/password signup and login, plus optional Google authentication
-- Food pantries on a Leaflet map (26 real LA/SoCal locations) with no-eligibility / no-ID / immigration-safe filters and "use my location"
+- Food pantries on a Leaflet map (26 real LA/SoCal locations) with no-eligibility / no-ID / immigration-safe filters and "use my location"; a "call ahead — hours change" note is shown since hours shift seasonally
 - Food Recovery — businesses post excess food, volunteers/nonprofits claim pickups; plus 11 real food-recovery programs (donation apps, free sharing, rescued-food stores) with multi-select filters
 - Volunteer directory + self-service volunteer sign-up form (searchable by ZIP and language)
 - Donor sign-up with a "claim this donation" flow and a recommended/not-accepted donation guide
-- Budget meal planner — 50+ plans from $10–$100, filterable by diet (vegetarian, vegan, halal, gluten-free, diabetic-friendly) and budget
+- Budget meal planner — 50+ plans from $10–$100, with multi-select diet filters (No restrictions, vegetarian, vegan, halal, gluten-free, diabetic-friendly) plus a max-budget filter
 - Donation page — Venmo deep links (preset + custom amounts) and a QR code
 - Youth programs (17 real programs) with multi-select age filters
+
+> **Data note:** All pantry addresses/phones and resource websites/phones were verified against official sources. Filters across Resources, Food Recovery, Youth, and Meal Planner are multi-select (pick several at once; "All" clears). Pantry hours and annually-set figures (e.g. Summer EBT, CalFresh maximums) are approximate and link to official sources.
 
 ### AI chatbot
 - Calls **Google Gemini** when a key is configured, falls back to rule-based replies otherwise

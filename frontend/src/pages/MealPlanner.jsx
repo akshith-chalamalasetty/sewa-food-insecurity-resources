@@ -3,7 +3,8 @@ import { api } from "../api";
 import { useLang } from "../context/LangContext.jsx";
 
 const DIETS = [
-  { key: "any",         tKey: "diet_all",        icon: "🍽️" },
+  { key: "all",         tKey: "diet_all",        icon: "🍽️" },  // clears the filter (shows everything)
+  { key: "any",         tKey: "diet_none",       icon: "🍴" },  // general "no special diet" plans
   { key: "vegetarian",  tKey: "diet_vegetarian", icon: "🥦" },
   { key: "vegan",       tKey: "diet_vegan",      icon: "🌱" },
   { key: "halal",       tKey: "diet_halal",      icon: "🕌" },
@@ -35,26 +36,37 @@ const DAY_NAMES = {
 export default function MealPlanner() {
   const { t, lang } = useLang();
   const [budget, setBudget] = useState("");
-  const [diet, setDiet] = useState("any");
+  // Multi-select diets: empty set = "All diets".
+  const [diets, setDiets] = useState(new Set());
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const load = async (d = diet, b = budget) => {
+  // Budget filtering stays on the backend; diet filtering is client-side
+  // so multiple diets can be combined instantly.
+  const load = async (b = budget) => {
     setLoading(true);
     try {
       const params = {};
       if (b) params.max_budget = b;
-      if (d && d !== "any") params.diet = d;
       setPlans(await api.mealPlans(params));
     } finally { setLoading(false); }
   };
 
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, [diet]);
+  useEffect(() => { load(); /* eslint-disable-next-line */ }, []);
+
+  const toggleDiet = (key) => {
+    if (key === "all") { setDiets(new Set()); return; }
+    const next = new Set(diets);
+    next.has(key) ? next.delete(key) : next.add(key);
+    setDiets(next);
+  };
 
   const dietLabel = (key) => {
     const d = DIETS.find((x) => x.key === key);
     return d ? `${d.icon} ${t(d.tKey)}` : key;
   };
+
+  const filtered = diets.size === 0 ? plans : plans.filter((p) => diets.has(p.diet));
 
   return (
     <div className="page">
@@ -65,8 +77,8 @@ export default function MealPlanner() {
         {DIETS.map((d) => (
           <button
             key={d.key}
-            className={`pill ${diet === d.key ? "active" : ""}`}
-            onClick={() => setDiet(d.key)}
+            className={`pill ${(d.key === "all" ? diets.size === 0 : diets.has(d.key)) ? "active" : ""}`}
+            onClick={() => toggleDiet(d.key)}
           >
             <span aria-hidden>{d.icon}</span> {t(d.tKey)}
           </button>
@@ -85,8 +97,8 @@ export default function MealPlanner() {
 
       {loading ? <p>{t("loading")}</p> : (
         <div className="list">
-          {plans.length === 0 && <p className="muted">{t("noMatch")}</p>}
-          {plans.map((p) => {
+          {filtered.length === 0 && <p className="muted">{t("noMatch")}</p>}
+          {filtered.map((p) => {
             const recipes = JSON.parse(p.recipes_json);
             const noKitchen = p.title.toLowerCase().includes("no kitchen");
             // Build the title and summary client-side so they follow the UI language.

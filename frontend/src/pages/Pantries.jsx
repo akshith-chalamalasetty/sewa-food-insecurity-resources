@@ -45,6 +45,7 @@ export default function Pantries() {
     <div className="page">
       <h2>🥕 {t("pantries")}</h2>
       <p className="muted">{t("pantriesIntro")}</p>
+      <div className="demo-banner">⏱️ {t("pantries_hoursNote")}</div>
 
       <div className="view-toggle">
         <button className="pill active" onClick={askLocation} disabled={locStatus === "locating"}>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { api } from "../api";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useLang } from "../context/LangContext.jsx";
@@ -16,7 +17,7 @@ const EMPTY = {
 const PROGRAMS = [
   {
     name: "Careit", audience: "business", icon: "📱",
-    link: "https://www.careitapp.com/",
+    link: "https://careit.com/",
     desc: {
       en: "Free app connecting restaurants and grocers with nonprofits for same-day surplus pickups. Donations are tax-deductible and liability-protected.",
       es: "App gratuita que conecta restaurantes y tiendas con organizaciones para recoger excedentes el mismo día. Donaciones deducibles de impuestos.",
@@ -28,7 +29,7 @@ const PROGRAMS = [
   },
   {
     name: "Chefs to End Hunger", audience: "business", icon: "👨‍🍳",
-    link: "https://www.chefstoendhunger.org/",
+    link: "https://www.chefsendhunger.org/",
     desc: {
       en: "LA program collecting prepared surplus food from restaurants, hotels, and caterers — repackaged into meals for shelters. Free pickup via existing delivery routes.",
       es: "Programa de LA que recoge comida preparada sobrante de restaurantes, hoteles y caterings — convertida en comidas para refugios. Recogida gratis.",
@@ -332,7 +333,7 @@ export default function FoodRecovery() {
           {showForm ? t("cancel") : t("postFood")}
         </button>
       ) : (
-        <p className="muted">🔑 {t("login")} →</p>
+        <p className="muted">🔑 {t("fr_loginRequired")} <Link to="/login">{t("login")}</Link></p>
       )}
 
       {showForm && (
